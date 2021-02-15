@@ -1,6 +1,7 @@
 ﻿namespace Foxes.Injection
 {
     using System;
+    using Core;
     using Resolvers;
 
     public class Injector : IInjector
@@ -65,6 +66,16 @@
         public object Get(Type type)
         {
             return _resolverMap.Get(type);
+        }
+
+        public T Get<T>(params object[] arguments)
+        {
+            return (T) Get(typeof(T), arguments);
+        }
+
+        public object Get(Type type, params object[] arguments)
+        {
+            return _resolverMap.Get(type, arguments);
         }
 
         public void Dispose()

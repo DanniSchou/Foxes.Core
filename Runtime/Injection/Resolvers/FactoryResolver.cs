@@ -1,6 +1,7 @@
 ﻿namespace Foxes.Injection.Resolvers
 {
     using System;
+    using Core;
 
     public class FactoryResolver : IResolver
     {
@@ -19,6 +20,11 @@
             var result = _factory();
             Injector.Inject(result);
             return result;
+        }
+
+        public object Resolve(params object[] arguments)
+        {
+            return Resolve();
         }
     }
 }

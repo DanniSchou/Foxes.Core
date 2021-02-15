@@ -2,8 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Events;
-    using Injection;
+    using Core;
     using JetBrains.Annotations;
 
     [PublicAPI]

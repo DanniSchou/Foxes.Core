@@ -6,9 +6,16 @@
     [PublicAPI]
     public class InjectedBehaviour : MonoBehaviour
     {
+        protected Root Root;
+
+        protected virtual void Awake()
+        {
+            Root = Root.Instance;
+        }
+
         protected virtual void Start()
         {
-            Root.Instance.Inject(this);
+            Root.Inject(this);
         }
     }
 }

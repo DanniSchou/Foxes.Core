@@ -1,6 +1,7 @@
 ﻿namespace Foxes.Injection.Resolvers
 {
     using System;
+    using Core;
 
     public class SingletonResolver : IResolver, IDisposable
     {
@@ -23,6 +24,19 @@
             }
             
             _value = Activator.CreateInstance(_target);
+            Injector.Inject(_value);
+
+            return _value;
+        }
+
+        public object Resolve(params object[] arguments)
+        {
+            if (_value != null)
+            {
+                return _value;
+            }
+            
+            _value = Activator.CreateInstance(_target, arguments);
             Injector.Inject(_value);
 
             return _value;

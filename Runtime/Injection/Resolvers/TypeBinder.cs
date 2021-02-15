@@ -1,6 +1,7 @@
 ﻿namespace Foxes.Injection.Resolvers
 {
     using System;
+    using Core;
 
     public readonly struct TypeBinder : ITypeBinder
     {
@@ -15,13 +16,13 @@
             _target = target;
         }
 
-        public void AsSingleton()
+        public void AsSingle()
         {
             var resolver = new SingletonResolver(_target);
             AddResolver(resolver);
         }
 
-        public void ToSingleton<T>() where T : new()
+        public void ToSingle<T>() where T : new()
         {
             var resolver = new SingletonResolver(typeof(T));
             AddResolver(resolver);

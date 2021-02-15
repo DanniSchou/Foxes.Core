@@ -1,6 +1,6 @@
 ﻿namespace Foxes.Events
 {
-    using Injection;
+    using Core;
     using JetBrains.Annotations;
 
     [PublicAPI]
@@ -10,7 +10,7 @@
         
         public void Configure()
         {
-            Injector.Bind<IEventBus>().ToSingleton<EventBus>();
+            Injector.Bind<IEventBus>().ToSingle<EventBus>();
         }
     }
 }
