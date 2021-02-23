@@ -1,4 +1,4 @@
-﻿namespace Foxes.Commands
+﻿namespace Foxes.Core
 {
     public interface ICommandGroup
     {

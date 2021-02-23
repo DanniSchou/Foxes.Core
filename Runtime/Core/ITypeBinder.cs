@@ -1,12 +1,12 @@
-﻿namespace Foxes.Injection
+﻿namespace Foxes.Core
 {
     using System;
 
     public interface ITypeBinder
     {
-        void AsSingleton();
+        void AsSingle();
         
-        void ToSingleton<T>() where T : new();
+        void ToSingle<T>() where T : new();
         
         void ToValue(object value);
         

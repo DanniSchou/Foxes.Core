@@ -1,4 +1,4 @@
-﻿namespace Foxes.Injection
+﻿namespace Foxes.Core
 {
     using System;
 
@@ -7,6 +7,10 @@
         T Get<T>();
 
         object Get(Type type);
+        
+        T Get<T>(params object[] arguments);
+        
+        object Get(Type type, params object[] arguments);
 
         ITypeBinder Bind<T>();
 

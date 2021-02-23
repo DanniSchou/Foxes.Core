@@ -8,22 +8,26 @@
     {
         public static Root Instance { get; } = new Root();
 
-        public IContext Context { get; }
+        public IInjector Injector { get; }
+
+        private IContext _context;
 
         private Root()
         {
-            Context = new Context();
+            _context = new Context();
 
             var settings = CoreSettings.GetOrCreateSettings();
             foreach (var config in settings.Configs)
             {
-                Context.Configure(config);
+                _context.Configure(config);
             }
+
+            Injector = _context.Injector;
         }
 
         public void Inject(object target)
         {
-            Context.Injector.Inject(target);
+            Injector.Inject(target);
         }
     }
 }

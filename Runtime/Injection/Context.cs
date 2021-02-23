@@ -1,6 +1,7 @@
 ﻿namespace Foxes.Injection
 {
     using System;
+    using Core;
 
     public class Context : IContext
     {

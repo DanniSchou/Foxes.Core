@@ -1,7 +1,6 @@
 ﻿namespace Foxes.Events
 {
     using Core;
-    using Injection;
 
     public class EventBusConfigAsset : ConfigAsset
     {

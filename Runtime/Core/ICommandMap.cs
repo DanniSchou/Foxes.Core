@@ -1,7 +1,6 @@
-﻿namespace Foxes.Commands
+﻿namespace Foxes.Core
 {
     using System;
-    using Events;
 
     public interface ICommandMap : IDisposable
     {

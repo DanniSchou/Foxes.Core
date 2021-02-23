@@ -1,4 +1,4 @@
-﻿namespace Foxes.Injection
+﻿namespace Foxes.Core
 {
     using System;
     using JetBrains.Annotations;

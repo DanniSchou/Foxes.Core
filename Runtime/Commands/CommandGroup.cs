@@ -2,8 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Events;
-    using Injection;
+    using Core;
 
     public class CommandGroup<T> : ICommandGroup where T : struct, IEvent
     {
@@ -26,8 +25,11 @@
             }
             
             _commandTypes.Add(type);
-            
-            Injector.Bind<TK>().AsSingleton();
+
+            if (!Injector.IsBound<TK>())
+            {
+                Injector.Bind<TK>().AsSingle();
+            }
 
             if (_commandTypes.Count == 1)
             {

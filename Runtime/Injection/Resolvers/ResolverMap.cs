@@ -22,6 +22,16 @@
             return resolver.Resolve();
         }
 
+        public object Get(Type type, params object[] arguments)
+        {
+            if (!_resolverMap.TryGetValue(type, out var resolver))
+            {
+                throw new Exception($"{nameof(ResolverMap)} doesn't have a resolver for {type.FullName}.");
+            }
+
+            return resolver.Resolve(arguments);
+        }
+
         public void Set(Type type, IResolver resolver)
         {
             if (_resolverMap.ContainsKey(type))

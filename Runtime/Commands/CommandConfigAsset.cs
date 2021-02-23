@@ -1,7 +1,6 @@
 ﻿namespace Foxes.Commands
 {
     using Core;
-    using Injection;
 
     public class CommandConfigAsset : ConfigAsset
     {
