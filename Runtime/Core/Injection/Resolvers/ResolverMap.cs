@@ -1,4 +1,4 @@
-﻿namespace Foxes.Injection.Resolvers
+﻿namespace Foxes.Core.Injection.Resolvers
 {
     using System;
     using System.Collections.Generic;

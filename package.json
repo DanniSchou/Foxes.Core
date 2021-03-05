@@ -1,7 +1,7 @@
 {
   "name": "com.foxesgames.core",
   "displayName": "Foxes Core",
-  "version": "0.1.0-preview",
+  "version": "0.1.0",
   "description": "This is the core library for FoxesGames projects including:\n\u25aa Dependency Injection\n\u25aa Event Bus\n\u25aa Commands",
   "type": "library",
   "hideInEditor": false

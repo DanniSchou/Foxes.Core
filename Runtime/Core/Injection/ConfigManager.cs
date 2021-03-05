@@ -1,4 +1,4 @@
-﻿namespace Foxes.Injection
+﻿namespace Foxes.Core.Injection
 {
     using System;
     using System.Collections.Generic;

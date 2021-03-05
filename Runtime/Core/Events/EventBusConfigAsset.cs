@@ -1,4 +1,4 @@
-﻿namespace Foxes.Events
+﻿namespace Foxes.Core.Events
 {
     using Core;
 
