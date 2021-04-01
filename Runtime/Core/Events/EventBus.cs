@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Core;
     using JetBrains.Annotations;
 
@@ -17,13 +18,14 @@
         
         public void Publish<T>(T eventData) where T : struct, IEvent
         {
-            var type = eventData.GetType();
+            var type = typeof(T);
             if (!_eventSubscriptions.TryGetValue(type, out var delegates))
             {
                 return;
             }
 
-            foreach (var action in delegates)
+            var delegateArray = delegates.ToArray();
+            foreach (var action in delegateArray)
             {
                 action.DynamicInvoke(eventData);
             }
@@ -45,7 +47,7 @@
 
         public void Unsubscribe<T>(Action<T> action) where T : struct, IEvent
         {
-            var type = action.GetType();
+            var type = typeof(T);
             if (!_eventSubscriptions.TryGetValue(type, out var delegates))
             {
                 return;
