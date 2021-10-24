@@ -16,11 +16,6 @@
             return _value;
         }
 
-        public object Resolve(params object[] arguments)
-        {
-            return Resolve();
-        }
-
         public void Dispose()
         {
             if (_value is IDisposable disposable)

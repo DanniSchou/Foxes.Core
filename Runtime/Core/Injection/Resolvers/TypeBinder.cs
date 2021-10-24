@@ -18,44 +18,37 @@
 
         public void AsSingle()
         {
-            var resolver = new SingletonResolver(_target);
-            AddResolver(resolver);
+            AddResolver(new SingletonResolver(_injector, _target));
         }
 
         public void ToSingle<T>() where T : new()
         {
-            var resolver = new SingletonResolver(typeof(T));
-            AddResolver(resolver);
+            AddResolver(new SingletonResolver(_injector, typeof(T)));
         }
 
         public void ToValue(object value)
         {
             _injector.Inject(value);
-            var resolver = new ValueResolver(value);
-            AddResolver(resolver);
+            AddResolver(new ValueResolver(value));
         }
 
         public void AsType()
         {
-            var resolver = new TypeResolver(_target);
-            AddResolver(resolver);
+            AddResolver(new TypeResolver(_injector, _target));
         }
 
         public void ToType<T>()
         {
-            var resolver = new TypeResolver(typeof(T));
-            AddResolver(resolver);
+            AddResolver(new TypeResolver(_injector, typeof(T)));
         }
 
         public void ToMethod(Func<object> factory)
         {
-            var resolver = new FactoryResolver(factory);
-            AddResolver(resolver);
+            AddResolver(new FactoryResolver(_injector, factory));
         }
 
         private void AddResolver(IResolver resolver)
         {
-            _injector.Inject(resolver);
             _resolverMap.Set(_target, resolver);
         }
     }

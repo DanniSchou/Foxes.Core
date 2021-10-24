@@ -6,11 +6,9 @@
     {
         object Get(Type type);
         
-        object Get(Type type, params object[] arguments);
-        
         void Set(Type type, IResolver resolver);
 
-        void Remove(Type type);
+        bool Remove(Type type);
 
         bool Contains(Type type);
     }

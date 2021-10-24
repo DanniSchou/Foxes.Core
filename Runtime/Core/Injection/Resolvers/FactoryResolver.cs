@@ -5,26 +5,20 @@
 
     public class FactoryResolver : IResolver
     {
-        [Inject]
-        protected IInjector Injector;
-
+        private readonly IInjector _injector;
         private readonly Func<object> _factory;
 
-        public FactoryResolver(Func<object> factory)
+        public FactoryResolver(IInjector injector, Func<object> factory)
         {
+            _injector = injector;
             _factory = factory;
         }
 
         public object Resolve()
         {
             var result = _factory();
-            Injector.Inject(result);
+            _injector.Inject(result);
             return result;
-        }
-
-        public object Resolve(params object[] arguments)
-        {
-            return Resolve();
         }
     }
 }

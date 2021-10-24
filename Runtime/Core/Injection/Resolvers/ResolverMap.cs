@@ -22,16 +22,6 @@
             return resolver.Resolve();
         }
 
-        public object Get(Type type, params object[] arguments)
-        {
-            if (!_resolverMap.TryGetValue(type, out var resolver))
-            {
-                throw new Exception($"{nameof(ResolverMap)} doesn't have a resolver for {type.FullName}.");
-            }
-
-            return resolver.Resolve(arguments);
-        }
-
         public void Set(Type type, IResolver resolver)
         {
             if (_resolverMap.ContainsKey(type))
@@ -42,9 +32,9 @@
             _resolverMap.Add(type, resolver);
         }
 
-        public void Remove(Type type)
+        public bool Remove(Type type)
         {
-            _resolverMap.Remove(type);
+            return _resolverMap.Remove(type);
         }
 
         public bool Contains(Type type)
@@ -61,6 +51,7 @@
                     disposable.Dispose();
                 }
             }
+            
             _resolverMap.Clear();
         }
     }

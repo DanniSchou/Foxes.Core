@@ -5,14 +5,14 @@
 
     public class SingletonResolver : IResolver, IDisposable
     {
-        [Inject]
-        protected IInjector Injector;
-
+        private readonly IInjector _injector;
         private readonly Type _target;
+        
         private object _value;
 
-        public SingletonResolver(Type target)
+        public SingletonResolver(IInjector injector, Type target)
         {
+            _injector = injector;
             _target = target;
         }
 
@@ -23,23 +23,7 @@
                 return _value;
             }
             
-            _value = Activator.CreateInstance(_target);
-            Injector.Inject(_value);
-
-            return _value;
-        }
-
-        public object Resolve(params object[] arguments)
-        {
-            if (_value != null)
-            {
-                return _value;
-            }
-            
-            _value = Activator.CreateInstance(_target, arguments);
-            Injector.Inject(_value);
-
-            return _value;
+            return _value = _injector.Create(_target);;
         }
 
         public void Dispose()

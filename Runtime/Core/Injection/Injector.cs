@@ -11,8 +11,18 @@
 
         public Injector()
         {
-            _reflector = new Reflector<InjectAttribute>();
+            _reflector = new Reflector(typeof(InjectAttribute));
             _resolverMap = new ResolverMap();
+        }
+
+        public T Get<T>()
+        {
+            return (T)Get(typeof(T));
+        }
+
+        public object Get(Type type)
+        {
+            return _resolverMap.Get(type);
         }
 
         public ITypeBinder Bind<T>()
@@ -25,14 +35,14 @@
             return new TypeBinder(this, _resolverMap, type);
         }
 
-        public void Unbind<T>()
+        public bool Unbind<T>()
         {
-            Unbind(typeof(T));
+            return Unbind(typeof(T));
         }
 
-        public void Unbind(Type type)
+        public bool Unbind(Type type)
         {
-            _resolverMap.Remove(type);
+            return _resolverMap.Remove(type);
         }
 
         public bool IsBound<T>()
@@ -47,35 +57,67 @@
 
         public void Inject(object target)
         {
+            InjectFields(target);
+            InjectProperties(target);
+            InjectMethods(target);
+        }
+
+        private void InjectFields(object target)
+        {
             var fieldInfos = _reflector.GetFieldInfos(target.GetType());
-            
-            var length = fieldInfos.Length;
-            for (var i = 0; i < length; i++)
+            foreach (var fieldInfo in fieldInfos)
             {
-                var fieldInfo = fieldInfos[i];
-                var value = _resolverMap.Get(fieldInfo.FieldType);
+                var value = Get(fieldInfo.FieldType);
                 fieldInfo.SetValue(target, value);
             }
         }
 
-        public T Get<T>()
+        private void InjectProperties(object target)
         {
-            return (T)Get(typeof(T));
+            var propertyInfos = _reflector.GetPropertyInfos(target.GetType());
+            foreach (var propertyInfo in propertyInfos)
+            {
+                var value = Get(propertyInfo.PropertyType);
+                propertyInfo.SetValue(target, value);
+            }
         }
 
-        public object Get(Type type)
+        private void InjectMethods(object target)
         {
-            return _resolverMap.Get(type);
+            var methodInfos = _reflector.GetMethodInfos(target.GetType());
+            foreach (var methodInfo in methodInfos)
+            {
+                var parameters = methodInfo.GetParameters();
+                var parameterCount = parameters.Length;
+                var arguments = new object[parameterCount];
+                for (var i = 0; i < parameterCount; i++)
+                {
+                    arguments[i] = Get(parameters[i].ParameterType);
+                }
+                
+                methodInfo.Invoke(target, arguments);
+            }
         }
 
-        public T Get<T>(params object[] arguments)
+        public T Create<T>()
         {
-            return (T) Get(typeof(T), arguments);
+            return (T)Create(typeof(T));
         }
 
-        public object Get(Type type, params object[] arguments)
+        public object Create(Type type)
         {
-            return _resolverMap.Get(type, arguments);
+            var constructorInfo = _reflector.GetConstructorInfo(type);
+            var parameters = constructorInfo.GetParameters();
+            var parameterCount = parameters.Length;
+            var arguments = new object[parameterCount];
+            for (var i = 0; i < parameterCount; i++)
+            {
+                arguments[i] = Get(parameters[i].ParameterType);
+            }
+            
+            var instance = constructorInfo.Invoke(arguments);
+            Inject(instance);
+            return instance;
         }
 
         public void Dispose()
