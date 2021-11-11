@@ -1,7 +1,6 @@
 ﻿namespace Foxes.Core.Injection.Resolvers
 {
     using System;
-    using Core;
 
     public class FactoryResolver : IResolver
     {

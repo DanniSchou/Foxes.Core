@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using Core;
 
     public class Reflector : IReflector
     {
@@ -101,6 +100,8 @@
                 {
                     if (property.IsDefined(_injectAttributeType, false))
                     {
+                        if (!property.CanWrite) throw new NotSupportedException($"Property {property.Name} in type {type.FullName} is marked for injection but doesn't have a setter.");
+                        
                         _tempPropertyInfos.Add(property);
                     }
                 }

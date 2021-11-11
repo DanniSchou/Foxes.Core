@@ -1,7 +1,6 @@
 ﻿namespace Foxes.Core.Injection
 {
     using System;
-    using Core;
     using Resolvers;
 
     public class Injector : IInjector
@@ -13,6 +12,12 @@
         {
             _reflector = new Reflector(typeof(InjectAttribute));
             _resolverMap = new ResolverMap();
+        }
+
+        public Injector(IReflector reflector, IResolverMap resolverMap)
+        {
+            _reflector = reflector;
+            _resolverMap = resolverMap;
         }
 
         public T Get<T>()

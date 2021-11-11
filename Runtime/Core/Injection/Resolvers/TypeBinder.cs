@@ -1,7 +1,6 @@
 ﻿namespace Foxes.Core.Injection.Resolvers
 {
     using System;
-    using Core;
 
     public readonly struct TypeBinder : ITypeBinder
     {
@@ -21,9 +20,14 @@
             AddResolver(new SingletonResolver(_injector, _target));
         }
 
-        public void ToSingle<T>() where T : new()
+        public void ToSingle<T>()
         {
-            AddResolver(new SingletonResolver(_injector, typeof(T)));
+            ToSingle(typeof(T));
+        }
+        
+        public void ToSingle(Type type)
+        {
+            AddResolver(new SingletonResolver(_injector, type));
         }
 
         public void ToValue(object value)
@@ -39,7 +43,12 @@
 
         public void ToType<T>()
         {
-            AddResolver(new TypeResolver(_injector, typeof(T)));
+            ToType(typeof(T));
+        }
+        
+        public void ToType(Type type)
+        {
+            AddResolver(new TypeResolver(_injector, type));
         }
 
         public void ToMethod(Func<object> factory)

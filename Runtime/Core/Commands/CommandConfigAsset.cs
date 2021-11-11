@@ -1,14 +1,12 @@
 ﻿namespace Foxes.Core.Commands
 {
-    using Core;
-
     public class CommandConfigAsset : ConfigAsset
     {
-        [Inject] protected IContext Context;
+        [Inject] protected IConfigManager ConfigManager;
         
         public override void Configure()
         {
-            Context.Configure<CommandConfig>();
+            ConfigManager.AddConfig<CommandConfig>();
         }
     }
 }

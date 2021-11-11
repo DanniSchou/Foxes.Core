@@ -2,18 +2,22 @@
 {
     using System;
     using System.Collections.Generic;
-    using Core;
+    using System.Linq;
+    using JetBrains.Annotations;
 
-    public class CommandGroup<T> : ICommandGroup where T : struct, IEvent
+    [UsedImplicitly]
+    public class CommandGroup<T> : ICommandGroup
     {
-        [Inject] protected IInjector Injector;
-        [Inject] protected IEventBus EventBus; 
-        
-        private readonly HashSet<Type> _commandTypes;
+        private readonly IInjector _injector;
+        private readonly IEventBus _eventBus;
+        private readonly List<Pair> _commandPairs;
 
-        public CommandGroup()
+        public CommandGroup(IInjector injector, IEventBus eventBus)
         {
-            _commandTypes = new HashSet<Type>();
+            _injector = injector;
+            _eventBus = eventBus;
+
+            _commandPairs = new List<Pair>();
         }
 
         public void Add<TK>()
@@ -23,42 +27,80 @@
             {
                 throw new ArgumentException($"{type.FullName} is being mapped as a command but does not implement {nameof(ICommand<T>)}");
             }
-            
-            _commandTypes.Add(type);
 
-            if (!Injector.IsBound<TK>())
+            if (Contains<TK>())
             {
-                Injector.Bind<TK>().AsSingle();
+                return;
             }
 
-            if (_commandTypes.Count == 1)
+            _commandPairs.Add(new Pair(type));
+
+            if (_commandPairs.Count == 1)
             {
-                EventBus.Subscribe<T>(OnEvent);
+                _eventBus.Subscribe<T>(OnEvent);
             }
         }
 
-        public void Remove<TK>()
+        public bool Remove<TK>()
         {
             var type = typeof(TK);
-            _commandTypes.Remove(type);
-
-            if (_commandTypes.Count == 0)
+            var pair = _commandPairs.FirstOrDefault(p => p.Type == type);
+            if (pair == null)
             {
-                EventBus.Unsubscribe<T>(OnEvent);
+                return false;
             }
+            
+            _commandPairs.Remove(pair);
+            if (pair.Command is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+            
+            if (_commandPairs.Count == 0)
+            {
+                _eventBus.Unsubscribe<T>(OnEvent);
+            }
+
+            return true;
         }
 
         public bool Contains<TK>()
         {
-            return _commandTypes.Contains(typeof(TK));
+            var type = typeof(TK);
+            return _commandPairs.Any(pair => pair.Type == type);
+        }
+
+        public void Dispose()
+        {
+            foreach (var pair in _commandPairs)
+            {
+                if (pair.Command is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+            
+            _commandPairs.Clear();
         }
 
         private void OnEvent(T eventData)
         {
-            foreach (var type in _commandTypes)
+            foreach (var pair in _commandPairs)
             {
-                var command = (ICommand<T>) Injector.Get(type);
-                command.Execute(eventData);
+                pair.Command ??= (ICommand<T>)_injector.Create(pair.Type);
+                pair.Command.Execute(eventData);
+            }
+        }
+
+        private class Pair
+        {
+            public Type Type { get; }
+
+            public ICommand<T> Command { get; set; }
+
+            public Pair(Type type)
+            {
+                Type = type;
             }
         }
     }

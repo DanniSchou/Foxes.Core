@@ -1,10 +1,9 @@
 ﻿namespace Foxes.Core.Commands
 {
-    using Core;
     using JetBrains.Annotations;
 
     [PublicAPI]
-    public class CommandConfig : IConfig, IHasConfigValidation
+    public class CommandConfig : IHasConfigValidation
     {
         [Inject] protected IInjector Injector;
         

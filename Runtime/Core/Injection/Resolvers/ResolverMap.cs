@@ -14,9 +14,11 @@
 
         public object Get(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            
             if (!_resolverMap.TryGetValue(type, out var resolver))
             {
-                throw new Exception($"{nameof(ResolverMap)} doesn't have a resolver for {type.FullName}.");
+                throw new ArgumentException($"{nameof(ResolverMap)} doesn't have a resolver for {type.FullName}.");
             }
 
             return resolver.Resolve();
@@ -24,9 +26,12 @@
 
         public void Set(Type type, IResolver resolver)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (resolver == null) throw new ArgumentNullException(nameof(resolver));
+            
             if (_resolverMap.ContainsKey(type))
             {
-                throw new Exception($"{nameof(ResolverMap)} already has resolver for {type.FullName}.");
+                throw new ArgumentException($"{nameof(ResolverMap)} already has resolver for {type.FullName}.");
             }
 
             _resolverMap.Add(type, resolver);
@@ -34,11 +39,13 @@
 
         public bool Remove(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
             return _resolverMap.Remove(type);
         }
 
         public bool Contains(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
             return _resolverMap.ContainsKey(type);
         }
 

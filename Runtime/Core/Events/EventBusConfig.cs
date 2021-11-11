@@ -1,6 +1,5 @@
 ﻿namespace Foxes.Core.Events
 {
-    using Core;
     using JetBrains.Annotations;
 
     [PublicAPI]

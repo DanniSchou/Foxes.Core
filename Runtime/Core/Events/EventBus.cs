@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
     using JetBrains.Annotations;
 
     [PublicAPI]
@@ -16,7 +15,7 @@
             _eventSubscriptions = new Dictionary<Type, HashSet<Delegate>>();
         }
         
-        public void Publish<T>(T eventData) where T : struct, IEvent
+        public void Publish<T>(T eventData)
         {
             var type = typeof(T);
             if (!_eventSubscriptions.TryGetValue(type, out var delegates))
@@ -31,7 +30,7 @@
             }
         }
 
-        public void Subscribe<T>(Action<T> action) where T : struct, IEvent
+        public void Subscribe<T>(Action<T> action)
         {
             var type = typeof(T);
             if (_eventSubscriptions.TryGetValue(type, out var delegates))
@@ -45,15 +44,10 @@
             }
         }
 
-        public void Unsubscribe<T>(Action<T> action) where T : struct, IEvent
+        public bool Unsubscribe<T>(Action<T> action)
         {
             var type = typeof(T);
-            if (!_eventSubscriptions.TryGetValue(type, out var delegates))
-            {
-                return;
-            }
-
-            delegates.Remove(action);
+            return _eventSubscriptions.TryGetValue(type, out var delegates) && delegates.Remove(action);
         }
 
         public void Dispose()

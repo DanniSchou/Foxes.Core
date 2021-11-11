@@ -6,28 +6,35 @@
     [PublicAPI]
     public sealed class Root
     {
-        public static Root Instance { get; } = new Root();
+        public static IInjector Injector => Instance._injector;
+        
+        private static Root Instance { get; } = new Root();
 
-        public IInjector Injector { get; }
-
-        private IContext _context;
+        private readonly IInjector _injector;
 
         private Root()
         {
-            _context = new Context();
-
-            var settings = CoreSettings.GetOrCreateSettings();
-            foreach (var config in settings.Configs)
-            {
-                _context.Configure(config);
-            }
-
-            Injector = _context.Injector;
+            _injector = new Injector();
+            
+            SetupInjector();
+            ConfigureInjector();
         }
 
-        public void Inject(object target)
+        private void SetupInjector()
         {
-            Injector.Inject(target);
+            _injector.Bind<IInjector>().ToValue(_injector);
+            _injector.Bind<IConfigManager>().ToSingle<ConfigManager>();
+        }
+
+        private void ConfigureInjector()
+        {
+            var configManager = _injector.Get<IConfigManager>();
+            var settings = CoreSettings.GetOrCreateSettings();
+            
+            foreach (var config in settings.Configs)
+            {
+                configManager.AddConfig(config);
+            }
         }
     }
 }

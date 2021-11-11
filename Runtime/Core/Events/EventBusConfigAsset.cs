@@ -1,14 +1,12 @@
 ﻿namespace Foxes.Core.Events
 {
-    using Core;
-
     public class EventBusConfigAsset : ConfigAsset
     {
-        [Inject] protected IContext Context;
+        [Inject] protected IConfigManager ConfigManager;
         
         public override void Configure()
         {
-            Context.Configure<EventBusConfig>();
+            ConfigManager.AddConfig<EventBusConfig>();
         }
     }
 }

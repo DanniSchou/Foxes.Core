@@ -1,19 +1,19 @@
 ﻿namespace Foxes.Core.Injection.Resolvers
 {
     using System;
-    using Core;
 
     public class SingletonResolver : IResolver, IDisposable
     {
+        public Type Target { get; }
+        
         private readonly IInjector _injector;
-        private readonly Type _target;
         
         private object _value;
 
         public SingletonResolver(IInjector injector, Type target)
         {
             _injector = injector;
-            _target = target;
+            Target = target;
         }
 
         public object Resolve()
@@ -23,7 +23,7 @@
                 return _value;
             }
             
-            return _value = _injector.Create(_target);;
+            return _value = _injector.Create(Target);;
         }
 
         public void Dispose()
