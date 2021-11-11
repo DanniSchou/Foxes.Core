@@ -1,6 +1,6 @@
 {
     "name": "Foxes.Core",
-    "rootNamespace": "Foxes",
+    "rootNamespace": "Foxes.Core",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
