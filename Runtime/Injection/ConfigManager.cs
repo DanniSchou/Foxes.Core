@@ -16,7 +16,10 @@
 
         public void AddConfig(IConfig config)
         {
-            if (config == null) throw new ArgumentNullException(nameof(config));
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
             
             if (_configuredTypes.Contains(config.GetType()))
             {
@@ -34,7 +37,10 @@
 
         public void AddConfig(Type type)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
             
             if (!typeof(IConfig).IsAssignableFrom(type))
             {

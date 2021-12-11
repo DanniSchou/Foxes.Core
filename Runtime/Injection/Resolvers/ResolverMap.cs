@@ -26,8 +26,15 @@
 
         public void Set(Type type, IResolver resolver)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            if (resolver == null) throw new ArgumentNullException(nameof(resolver));
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (resolver == null)
+            {
+                throw new ArgumentNullException(nameof(resolver));
+            }
             
             if (_resolverMap.ContainsKey(type))
             {
@@ -39,13 +46,21 @@
 
         public bool Remove(Type type)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+            
             return _resolverMap.Remove(type);
         }
 
         public bool Contains(Type type)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+            
             return _resolverMap.ContainsKey(type);
         }
 

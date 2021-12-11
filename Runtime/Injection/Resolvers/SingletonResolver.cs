@@ -23,7 +23,7 @@
                 return _value;
             }
             
-            return _value = _injector.Create(Target);;
+            return _value = _injector.Create(Target);
         }
 
         public void Dispose()

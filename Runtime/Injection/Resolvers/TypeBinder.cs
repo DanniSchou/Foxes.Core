@@ -2,7 +2,7 @@
 {
     using System;
 
-    public readonly struct TypeBinder : ITypeBinder
+    public readonly struct TypeBinder : ITypeBinder, IEquatable<TypeBinder>
     {
         private readonly IInjector _injector;
         private readonly IResolverMap _resolverMap;
@@ -59,6 +59,21 @@
         private void AddResolver(IResolver resolver)
         {
             _resolverMap.Set(_target, resolver);
+        }
+
+        public bool Equals(TypeBinder other)
+        {
+            return _target == other._target;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is TypeBinder other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_injector, _resolverMap, _target);
         }
     }
 }

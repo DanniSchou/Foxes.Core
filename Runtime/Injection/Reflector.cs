@@ -100,7 +100,10 @@
                 {
                     if (property.IsDefined(_injectAttributeType, false))
                     {
-                        if (!property.CanWrite) throw new NotSupportedException($"Property {property.Name} in type {type.FullName} is marked for injection but doesn't have a setter.");
+                        if (!property.CanWrite)
+                        {
+                            throw new NotSupportedException($"Property {property.Name} in type {type.FullName} is marked for injection but doesn't have a setter.");
+                        }
                         
                         _tempPropertyInfos.Add(property);
                     }
