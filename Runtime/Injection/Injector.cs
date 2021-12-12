@@ -1,6 +1,7 @@
 ﻿namespace Foxes.Core.Injection
 {
     using System;
+    using System.Reflection;
     using Resolvers;
 
     public class Injector : IInjector
@@ -92,16 +93,23 @@
             var methodInfos = _reflector.GetMethodInfos(target.GetType());
             foreach (var methodInfo in methodInfos)
             {
-                var parameters = methodInfo.GetParameters();
-                var parameterCount = parameters.Length;
-                var arguments = new object[parameterCount];
-                for (var i = 0; i < parameterCount; i++)
-                {
-                    arguments[i] = Get(parameters[i].ParameterType);
-                }
-                
+                var arguments = GetMethodArguments(methodInfo);
                 methodInfo.Invoke(target, arguments);
             }
+        }
+
+        private object[] GetMethodArguments(MethodBase methodBase)
+        {
+            var parameters = methodBase.GetParameters();
+            var parameterCount = parameters.Length;
+            var arguments = new object[parameterCount];
+            
+            for (var i = 0; i < parameterCount; i++)
+            {
+                arguments[i] = Get(parameters[i].ParameterType);
+            }
+
+            return arguments;
         }
 
         public T Create<T>()
@@ -112,14 +120,7 @@
         public object Create(Type type)
         {
             var constructorInfo = _reflector.GetConstructorInfo(type);
-            var parameters = constructorInfo.GetParameters();
-            var parameterCount = parameters.Length;
-            var arguments = new object[parameterCount];
-            for (var i = 0; i < parameterCount; i++)
-            {
-                arguments[i] = Get(parameters[i].ParameterType);
-            }
-            
+            var arguments = GetMethodArguments(constructorInfo);
             var instance = constructorInfo.Invoke(arguments);
             Inject(instance);
             return instance;
