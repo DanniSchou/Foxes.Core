@@ -63,7 +63,7 @@
 
         public bool Equals(TypeBinder other)
         {
-            return _target == other._target;
+            return _target == other._target && Equals(_injector, other._injector) && Equals(_resolverMap, other._resolverMap);
         }
 
         public override bool Equals(object obj)

@@ -14,7 +14,10 @@
 
         public object Get(Type type)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
             
             if (!_resolverMap.TryGetValue(type, out var resolver))
             {
