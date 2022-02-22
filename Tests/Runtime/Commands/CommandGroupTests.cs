@@ -406,7 +406,7 @@
                 throw new NotImplementedException();
             }
 
-            public void Publish<T>(T eventData)
+            public void Publish(object eventData)
             {
                 throw new NotImplementedException();
             }

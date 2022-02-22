@@ -109,7 +109,25 @@
             Assert.True(unsubscribed);
         }
         
+        [Test]
+        public void SubscribeChild_PublishChildAsBaseEvent_EventInvokesAction()
+        {
+            var eventBus = new EventBus();
+
+            var actionInvoked = false;
+            Action<ChildMockEvent> action = eventData => actionInvoked = true;
+            eventBus.Subscribe(action);
+
+            BaseMockEvent mockEvent = new ChildMockEvent();
+            eventBus.Publish(mockEvent);
+            
+            Assert.True(actionInvoked);
+        }
+        
         private struct MockEvent {}
         private struct MockWrongEvent {}
+        
+        private class BaseMockEvent {}
+        private class ChildMockEvent : BaseMockEvent {}
     }
 }

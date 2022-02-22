@@ -15,9 +15,9 @@
             _eventSubscriptions = new Dictionary<Type, HashSet<Delegate>>();
         }
         
-        public void Publish<T>(T eventData)
+        public void Publish(object eventData)
         {
-            var type = typeof(T);
+            var type = eventData.GetType();
             if (!_eventSubscriptions.TryGetValue(type, out var delegates))
             {
                 return;

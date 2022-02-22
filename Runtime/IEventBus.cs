@@ -8,11 +8,9 @@
     {
         /// <summary>
         /// Publish event, all subscribed handlers will be invoked with the given event.
-        /// Best practise is to use structs for your events to avoid heap allocations.
         /// </summary>
         /// <param name="eventData">Event</param>
-        /// <typeparam name="T">Type</typeparam>
-        void Publish<T>(T eventData);
+        void Publish(object eventData);
 
         /// <summary>
         /// Subscribes action to be invoked when event type is published.
